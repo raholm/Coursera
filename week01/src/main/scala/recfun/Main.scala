@@ -1,4 +1,4 @@
-package week01.recfun
+package recfun
 
 object Main {
   def main(args: Array[String]) {
