@@ -13,7 +13,7 @@ object Week03 {
     override def contains(x: Int): Boolean = false
     override def incl(x: Int): IntSet = new NonEmpty(x, Empty, Empty)
     override def union(other: IntSet): IntSet = other
-    override def toString = "."
+    override def toString: String = "."
   }
 
   class NonEmpty(elem: Int, left: IntSet, right: IntSet) extends IntSet {
@@ -33,7 +33,7 @@ object Week03 {
       ((left union right) union other) incl elem
     }
 
-    override def toString = "{" + left + elem + right + "}"
+    override def toString: String = "{" + left + elem + right + "}"
   }
 
   trait List[T] {
