@@ -123,15 +123,15 @@ abstract class TweetSet {
 class Empty extends TweetSet {
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = acc
 
-  /**
-    * The following methods are already implemented
-    */
-
   override def isEmpty = true
 
   override def mostRetweeted = throw new NoSuchElementException("Empty.mostRetweeted")
 
   override def union(that: TweetSet) = that
+
+  /**
+    * The following methods are already implemented
+    */
 
   def contains(tweet: Tweet): Boolean = false
 
@@ -151,21 +151,25 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   override def isEmpty = false
 
-  /**
-    * The following methods are already implemented
-    */
-
   override def union(that: TweetSet) = {
-    ((left union right) union that) incl elem
+    filterAcc(_ => true, that)
   }
 
   override def mostRetweeted = {
-    val children = left union right
-    val remaining = children.filter(t => t.retweets > elem.retweets)
+    def maxTweet(tweet1: Tweet, tweet2: Tweet): Tweet = {
+      if (tweet1.retweets > tweet2.retweets) tweet1
+      else tweet2
+    }
 
-    if (remaining.isEmpty) elem
-    else remaining.mostRetweeted
+    if (left.isEmpty && right.isEmpty) elem
+    else if (left.isEmpty) maxTweet(elem, right.mostRetweeted)
+    else if (right.isEmpty) maxTweet(elem, left.mostRetweeted)
+    else maxTweet(elem, maxTweet(left.mostRetweeted, right.mostRetweeted))
   }
+
+  /**
+    * The following methods are already implemented
+    */
 
   def contains(x: Tweet): Boolean =
     if (x.text < elem.text) left.contains(x)
