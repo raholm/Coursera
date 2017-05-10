@@ -1,7 +1,5 @@
 package streams
 
-import common._
-
 /**
  * This component implements a parser to define terrains from a
  * graphical ASCII representation.
@@ -9,19 +7,19 @@ import common._
  * When mixing in that component, a level can be defined by
  * defining the field `level` in the following form:
  *
- *   val level =
- *     """------
- *       |--ST--
- *       |--oo--
- *       |--oo--
- *       |------""".stripMargin
- *
+  * val level =
+  * """------
+  * |--ST--
+  * |--oo--
+  * |--oo--
+  * |------""".stripMargin
+  *
  * - The `-` character denotes parts which are outside the terrain
  * - `o` denotes fields which are part of the terrain
  * - `S` denotes the start position of the block (which is also considered
-     inside the terrain)
+  * inside the terrain)
  * - `T` denotes the final position of the block (which is also considered
-     inside the terrain)
+  * inside the terrain)
  *
  * In this example, the first and last lines could be omitted, and
  * also the columns that consist of `-` characters only.
@@ -52,7 +50,13 @@ trait StringParserTerrain extends GameDef {
    * a valid position (not a '-' character) inside the terrain described
    * by `levelVector`.
    */
-  def terrainFunction(levelVector: Vector[Vector[Char]]): Pos => Boolean = ???
+  def terrainFunction(levelVector: Vector[Vector[Char]]): Pos => Boolean = {
+    (pos: Pos) => {
+      if (pos.row < 0 || pos.row >= levelVector.length) false
+      else if (pos.col < 0 || pos.col >= levelVector(pos.row).length) false
+      else levelVector(pos.row)(pos.col) != '-'
+    }
+  }
 
   /**
    * This function should return the position of character `c` in the
@@ -62,7 +66,13 @@ trait StringParserTerrain extends GameDef {
    * Hint: you can use the functions `indexWhere` and / or `indexOf` of the
    * `Vector` class
    */
-  def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos = ???
+  def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos = {
+    val colRow: Option[(Int, Int)] = levelVector.map(_ indexOf c).zipWithIndex.find(_._1 > -1)
+    colRow match {
+      case Some((y: Int, x: Int)) => Pos(x, y)
+      case _ => throw new NoSuchElementException("Could not find %s".format(c))
+    }
+  }
 
   private lazy val vector: Vector[Vector[Char]] =
     Vector(level.split("\n").map(str => Vector(str: _*)): _*)
