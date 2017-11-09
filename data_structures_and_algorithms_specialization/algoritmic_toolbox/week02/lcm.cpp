@@ -8,6 +8,10 @@ long long lcm_naive(int a, int b) {
   return (long long) a * b;
 }
 
+unsigned long long lcm_fast(unsigned a, unsigned b) {
+
+}
+
 int main() {
   int a, b;
   std::cin >> a >> b;
