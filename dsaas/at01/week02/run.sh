@@ -69,6 +69,7 @@ g++ -pipe -O2 -std=c++14 $source -lm -o $executable
 echo "Fibonacci Sum Last Digit"
 echo "3" | ./$executable
 echo "100" | ./$executable
+echo "832564823476" | ./$executable
 
 ####
 source=fibonacci_partial_sum.cpp
@@ -80,3 +81,4 @@ echo "Fibonacci Partial Sum Last Digit"
 echo "3 7" | ./$executable
 echo "10 10" | ./$executable
 echo "10 200" | ./$executable
+# echo "10 10000000000" | ./$executable

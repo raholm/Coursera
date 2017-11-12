@@ -18,23 +18,25 @@ int fibonacci_sum_naive(long long n) {
     return sum % 10;
 }
 
-unsigned long long fibonacci_sum_fast(long long n) {
-    if (n <= 1)
-        return n;
+unsigned get_fibonacci_last_digit_fast(unsigned long long n) {
+    if (n <= 1) return n;
 
-    unsigned long long previous = 0;
-    unsigned long long current = 1;
-    unsigned long long sum = 1;
+    unsigned previous = 0;
+    unsigned current = 1;
+    unsigned tmp;
 
     for (unsigned long long i = 0; i < n - 1; ++i) {
-        unsigned long long tmp_previous = previous;
+        tmp = previous;
         previous = current;
-        current = (tmp_previous + current) % 10;
-        sum += current;
-        sum %= 10;
+        current = (tmp + current) % 10;
     }
 
-    return sum;
+    return current;
+}
+
+unsigned fibonacci_sum_fast(unsigned long long n) {
+    unsigned last_digit = get_fibonacci_last_digit_fast((n + 2) % 60);
+    return last_digit == 0 ? 9 : last_digit - 1;
 }
 
 int main() {
