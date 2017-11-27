@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-using std::vector;
 
 long long get_fibonacci_partial_sum_naive(long long from, long long to) {
     long long sum = 0;
@@ -21,24 +19,31 @@ long long get_fibonacci_partial_sum_naive(long long from, long long to) {
     return sum % 10;
 }
 
+unsigned get_fibonacci_last_digit_fast(int n) {
+    if (n <= 1) return n;
 
-unsigned long long get_fibonacci_partial_sum_fast(unsigned long long from, unsigned long long to) {
-    unsigned long long current = 0;
-    unsigned long long next  = 1;
-    unsigned long long sum = 0;
+    unsigned previous = 0;
+    unsigned current = 1;
+    unsigned tmp;
 
-    for (unsigned long long i = 0; i <= to; ++i) {
-        if (i >= from) {
-            sum += current;
-            sum %= 10;
-        }
-
-        unsigned long long new_current = next;
-        next = (next + current) % 10;
-        current = new_current;
+    for (unsigned i = 0; i < n - 1; ++i) {
+        tmp = previous;
+        previous = current;
+        current = (tmp + current) % 10;
     }
 
-    return sum;
+    return current;
+}
+
+unsigned long long get_fibonacci_partial_sum_fast(unsigned long long from, unsigned long long to) {
+    unsigned last_digit1 = get_fibonacci_last_digit_fast((to + 2) % 60);
+    unsigned last_digit2 = get_fibonacci_last_digit_fast((from + 2) % 60);
+
+    unsigned last_digit = last_digit1 + last_digit2;
+
+    if (last_digit == 0) return 8;
+    else if (last_digit == 1) return 1;
+    return last_digit - 2;
 }
 
 
