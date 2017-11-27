@@ -53,3 +53,5 @@ echo "3 23 39 92" | ./$executable
 echo "3 0 2 8" | ./$executable
 echo "3 23 399 92" | ./$executable
 echo "3 0 2 8" | ./$executable
+echo "2 29 2" | ./$executable
+echo "2 2 29" | ./$executable
